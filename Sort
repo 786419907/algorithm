@@ -1,0 +1,129 @@
+import java.util.Stack;
+
+public class Sort {
+	public static void main(String[] args) {
+		int[] arr = { 49, 65, 38, 97, 76, 27, 13, 1 };
+		// Bubble(arr);
+		//Quick(arr, 0, arr.length - 1);
+		//Quick2(arr, 0, arr.length - 1);
+		//Selection(arr);
+		//InsertSort(arr);
+		shellSort(arr);
+	}
+
+	private static void shellSort(int[] arr) {
+		int length = arr.length;
+		int gap = length / 2;
+		while(gap >= 1){
+			for (int i = gap; i < arr.length; i++) {
+				for (int j = i - gap; j >= 0 && arr[j] >arr[j + gap]; j = j - gap) {
+					arr[j] = arr[j] ^ arr[j + gap];
+					arr[j + gap] = arr[j] ^ arr[j + gap];
+					arr[j] = arr[j] ^ arr[j + gap];
+					System.out.println(arr[j]+"."+arr[j+gap]);
+				}
+			}
+			Show(arr);
+			gap = gap / 2;
+		}
+	}
+
+	private static void Quick2(int[] arr, int left, int right) {
+		Stack<Integer> stack = new Stack<Integer>();
+		if (left < right) {
+			stack.push(left);
+			stack.push(right);
+			while (!stack.isEmpty()) {
+				Integer _right = stack.pop();
+				Integer _left = stack.pop();
+				int pivot = Division(arr, _left, _right);
+				if (pivot - 1 > _left) {
+					stack.push(_left);
+					stack.push(pivot - 1);
+				}
+				if (pivot + 1 < right) {
+					stack.push(pivot + 1);
+					stack.push(right);
+				}
+				
+				
+			}
+		}
+	}
+
+	private static void InsertSort(int[] arr) {
+		for (int i = 1; i < arr.length; i++) {
+			if (arr[i] < arr[i - 1]) {
+				int temp = arr[i];
+				int j;
+				for (j = i - 1; j >= 0 && arr[j] > temp; j--) {
+					arr[j + 1] = arr[j];
+				}
+				arr[j + 1] = temp;
+			}
+			Show(arr);
+		}
+	}
+
+	private static void Selection(int[] arr) {
+		for (int i = 0; i < arr.length - 1; i++) {
+			int temp = i;
+			for (int j = i + 1; j < arr.length; j++) {
+				if (arr[temp] > arr[j]) {
+					temp = j;
+				}
+			}
+			if (temp != i) {
+				arr[i] = arr[i] ^ arr[temp];
+				arr[temp] = arr[i] ^ arr[temp];
+				arr[i] = arr[i] ^ arr[temp];
+			}
+			Show(arr);
+		}
+	}
+
+	private static void Quick(int[] arr, int left, int right) {
+		if (left < right) {
+			int pivot = Division(arr, left, right);
+			Quick(arr, left, pivot - 1);
+			Quick(arr, pivot + 1, right);
+		}
+	}
+
+	private static int Division(int[] arr, int left, int right) {
+		int baseNum = arr[left];
+		while (left < right) {
+			while (left < right && arr[right] > baseNum)
+				right--;
+			if (left < right)
+				arr[left++] = arr[right];
+			while (left < right && arr[left] < baseNum)
+				left++;
+			if (left < right)
+				arr[right--] = arr[left];
+		}
+		arr[left] = baseNum;
+		Show(arr);
+		return left;
+	}
+
+	private static void Bubble(int[] arr) {
+		for (int i = 0; i < arr.length - 1; i++) {
+			for (int j = arr.length - 1; j > i; j--) {
+				if (arr[j] < arr[j - 1]) {
+					arr[j] = arr[j] ^ arr[j - 1];
+					arr[j - 1] = arr[j] ^ arr[j - 1];
+					arr[j] = arr[j] ^ arr[j - 1];
+				}
+			}
+			Show(arr);
+		}
+	}
+
+	private static void Show(int[] arr) {
+		for (int j = 0; j < arr.length; j++) {
+			System.out.print(arr[j] + ",");
+		}
+		System.out.println();
+	}
+}
