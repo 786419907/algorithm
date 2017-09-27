@@ -1,0 +1,87 @@
+import java.util.Scanner;
+
+/*1
+ABCD EFGH even
+ABCI EFJK up
+ABIJ EFGH even
+*/
+public class identifyCoin {
+	static char[][] left_set = new char[3][4];
+	static char[][] right_set = new char[3][4];
+	static char[][] result_set = new char[3][4];
+	static Scanner sc = new Scanner(System.in);
+
+	public static void main(String[] args) {
+		int i = sc.nextInt();
+		while (i-- != 0) {
+			for (int j = 0; j < 3; j++) {
+				inputSet(j, left_set);
+				inputSet(j, right_set);
+				inputSet(j, result_set);
+			}
+		}
+		for (char c = 'A'; c <= 'L'; c++) {
+			if (isFake(c, true)) {
+				System.out.println(c + " is counterfeit,light");
+				break;
+			} else if (isFake(c, false)) {
+				System.out.println(c + " is counterfeit,heavy");
+				break;
+			}
+		}
+	}
+
+	private static void inputSet(int j, char[][] set) {
+		String sc_set = sc.next();
+		for (int k = 0; k < sc_set.length(); k++) {
+			set[j][k] = sc_set.charAt(k);
+		}
+	}
+
+	static boolean isFake(char c, boolean light) {
+		if (light) {
+			for (int i = 0; i < 3; i++) {
+				switch (result_set[i][0]) {
+				case 'u':
+					if (String.valueOf(right_set[i]).indexOf(String.valueOf(c)) == -1) {
+						return false;
+					}
+					break;
+				case 'd':
+					if (String.valueOf(left_set[i]).indexOf(String.valueOf(c)) == -1) {
+						return false;
+					}
+					break;
+				case 'e':
+					if (String.valueOf(right_set[i]).indexOf(String.valueOf(c)) != -1
+							|| String.valueOf(left_set[i]).toString().indexOf(String.valueOf(c)) != -1) {
+						return false;
+					}
+					break;
+				}
+			}
+		} else {
+			for (int i = 0; i < 3; i++) {
+				switch (result_set[i][0]) {
+				case 'u':
+					if (String.valueOf(left_set[i]).toString().indexOf(String.valueOf(c)) == -1) {
+						return false;
+					}
+					break;
+				case 'd':
+					if (String.valueOf(right_set[i]).toString().indexOf(String.valueOf(c)) == -1) {
+						return false;
+					}
+					break;
+				case 'e':
+					if (String.valueOf(right_set[i]).toString().indexOf(String.valueOf(c)) != -1
+							|| String.valueOf(left_set[i]).toString().indexOf(String.valueOf(c)) != -1) {
+						return false;
+					}
+					break;
+				}
+			}
+		}
+		return true;
+	}
+}
